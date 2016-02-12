@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D16741A1C6E9CAA00D1D91F /* delivery_tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1674191C6E9CAA00D1D91F /* delivery_tests.swift */; };
 		4D58D2541C6E9B0C001E1589 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58D2531C6E9B0C001E1589 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,11 +24,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4D1674171C6E9CAA00D1D91F /* delivery_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = delivery_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D1674191C6E9CAA00D1D91F /* delivery_tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = delivery_tests.swift; sourceTree = "<group>"; };
+		4D16741B1C6E9CAA00D1D91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D58D2501C6E9B0C001E1589 /* delivery */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = delivery; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D58D2531C6E9B0C001E1589 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4D1674141C6E9CAA00D1D91F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4D58D24D1C6E9B0C001E1589 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,10 +49,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4D1674181C6E9CAA00D1D91F /* delivery_tests */ = {
+			isa = PBXGroup;
+			children = (
+				4D1674191C6E9CAA00D1D91F /* delivery_tests.swift */,
+				4D16741B1C6E9CAA00D1D91F /* Info.plist */,
+			);
+			path = delivery_tests;
+			sourceTree = "<group>";
+		};
 		4D58D2471C6E9B0C001E1589 = {
 			isa = PBXGroup;
 			children = (
 				4D58D2521C6E9B0C001E1589 /* delivery */,
+				4D1674181C6E9CAA00D1D91F /* delivery_tests */,
 				4D58D2511C6E9B0C001E1589 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				4D58D2501C6E9B0C001E1589 /* delivery */,
+				4D1674171C6E9CAA00D1D91F /* delivery_tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -65,6 +87,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4D1674161C6E9CAA00D1D91F /* delivery_tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4D16741C1C6E9CAA00D1D91F /* Build configuration list for PBXNativeTarget "delivery_tests" */;
+			buildPhases = (
+				4D1674131C6E9CAA00D1D91F /* Sources */,
+				4D1674141C6E9CAA00D1D91F /* Frameworks */,
+				4D1674151C6E9CAA00D1D91F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = delivery_tests;
+			productName = delivery_tests;
+			productReference = 4D1674171C6E9CAA00D1D91F /* delivery_tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		4D58D24F1C6E9B0C001E1589 /* delivery */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4D58D2571C6E9B0C001E1589 /* Build configuration list for PBXNativeTarget "delivery" */;
@@ -92,6 +131,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Athanasios Theodoridis";
 				TargetAttributes = {
+					4D1674161C6E9CAA00D1D91F = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
 					4D58D24F1C6E9B0C001E1589 = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
@@ -110,11 +152,30 @@
 			projectRoot = "";
 			targets = (
 				4D58D24F1C6E9B0C001E1589 /* delivery */,
+				4D1674161C6E9CAA00D1D91F /* delivery_tests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		4D1674151C6E9CAA00D1D91F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		4D1674131C6E9CAA00D1D91F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D16741A1C6E9CAA00D1D91F /* delivery_tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4D58D24C1C6E9B0C001E1589 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,6 +187,28 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		4D16741D1C6E9CAA00D1D91F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = delivery_tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.attheodo.delivery-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4D16741E1C6E9CAA00D1D91F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = delivery_tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.attheodo.delivery-tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		4D58D2551C6E9B0C001E1589 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -223,6 +306,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4D16741C1C6E9CAA00D1D91F /* Build configuration list for PBXNativeTarget "delivery_tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D16741D1C6E9CAA00D1D91F /* Debug */,
+				4D16741E1C6E9CAA00D1D91F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		4D58D24B1C6E9B0C001E1589 /* Build configuration list for PBXProject "delivery" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -239,6 +330,7 @@
 				4D58D2591C6E9B0C001E1589 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
