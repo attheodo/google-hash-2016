@@ -8,6 +8,17 @@
 
 import Foundation
 
+extension Array where Element: Equatable {
+    
+    // Remove first collection element that is equal to the given `object`:
+    mutating func removeObject(object : Element) {
+        if let index = self.indexOf(object) {
+            self.removeAtIndex(index)
+        }
+    }
+}
+
+
 func distanceBetweenPoint(p1: Point, andPointB p2: Point) -> Int {
     
     let rowDelta = Int(pow(Double(p1.row - p2.row), Double(2)))
@@ -38,7 +49,7 @@ func parseSimulationParametersFromInputFile(lines: [String]) {
     deadlineTurns = Int(simulationParams[3])!
     maxDronePayload = Int(simulationParams[4])!
     
-    print("Map: [\(mapRows), \(mapColumns)] - Drones: \(numOfDrones) (Max Payload: \(maxDronePayload)kg) - Deadline: \(deadlineTurns) turns\n")
+    print("📜: [\(mapRows), \(mapColumns)] - 🚁: \(numOfDrones) (Max Payload: \(maxDronePayload)kg) - ⏲: \(deadlineTurns) turns\n")
     
 }
 
@@ -58,7 +69,7 @@ func parseProductTypesFromInputFile(lines: [String]) -> [Product] {
     }
     
     assert(numOfProductTypes == products.count)
-    print("● Parsed \(numOfProductTypes) products")
+    print("📦 Parsed \(numOfProductTypes) products")
     
     return products
 
@@ -81,17 +92,19 @@ func parseWarehouseDataFromInputFile(lines: [String], andProductCatalog catalog:
 
         let products = lines[warehouseDataIndex+1].componentsSeparatedByString(" ")
         
-        for productId in products {
+        for (productId, quantity) in products.enumerate() {
             
-            let p = catalog.filter({ $0.id == Int(productId)! })[0]
-            inventory.append(p)
-        
+            let p = catalog.filter({ $0.id == Int(productId) })[0]
+            var q = Int(quantity)!
+            while(q != 0) {
+                inventory.append(p)
+                q -= 1
+            }
+            
         }
         
         let warehouse = Warehouse(id: i, location: location, inventory: inventory)
         
-        assert(warehouse.inventory.count == products.count)
-
         warehouses.append(warehouse)
         
         warehouseDataIndex += 2
@@ -99,7 +112,7 @@ func parseWarehouseDataFromInputFile(lines: [String], andProductCatalog catalog:
     }
     
     assert(numOfWarehouses == warehouses.count)
-    print("● Parsed data for \(numOfWarehouses) warehouses")
+    print("🏢 Parsed data for \(numOfWarehouses) warehouses")
     
     return warehouses
     
@@ -132,7 +145,7 @@ func parseOrderDataFromInputFile(lines: [String], andProductCatalog catalog:[Pro
        
         }
         
-        let order = Order(id: i, deliveryLocation: location, products: orderProducts)
+        let order = Order(id: i, location: location, products: orderProducts)
         
         assert(order.products.count == numOfProducts)
         
@@ -143,8 +156,29 @@ func parseOrderDataFromInputFile(lines: [String], andProductCatalog catalog:[Pro
     }
     
     assert(numOfOrders == orders.count)
-    print("● Parsed data for \(numOfOrders) orders")
+    print("🚩 Parsed data for \(numOfOrders) orders\n")
 
     return orders
     
+}
+
+
+func getServiceClusterWithWarehouseId(id: Int, fromServiceClusters clusters:[ServiceCluster]) -> ServiceCluster? {
+    
+    let results = clusters.filter({ $0.warehouse.id == id })
+    
+    if results.count > 0 {
+        return results[0]
+    } else {
+        return nil
+    }
+    
+}
+
+func getOrderWithId(id: Int, fromOrders orders:[Order]) -> Order {
+    return orders.filter({ $0.id == id})[0]
+}
+
+func getWarehouseWithId(id: Int, fromWarehouses warehouses:[Warehouse]) -> Warehouse {
+    return warehouses.filter({ $0.id == id})[0]
 }
