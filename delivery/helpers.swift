@@ -8,8 +8,6 @@
 
 import Foundation
 
-typealias Point = (row:Int, column:Int)
-
 func distanceBetweenPoint(p1: Point, andPointB p2: Point) -> Int {
     
     let rowDelta = Int(pow(Double(p1.row - p2.row), Double(2)))
@@ -30,9 +28,9 @@ func parseInputAtFilePath(filePath: String) -> [String] {
     
 }
 
-func parseSimulationParametersFromInputFile(fileLines: [String]) {
+func parseSimulationParametersFromInputFile(lines: [String]) {
     
-    let simulationParams = fileLines[0].componentsSeparatedByString(" ")
+    let simulationParams = lines[0].componentsSeparatedByString(" ")
     
     mapRows = Int(simulationParams[0])!
     mapColumns = Int(simulationParams[1])!
@@ -40,6 +38,113 @@ func parseSimulationParametersFromInputFile(fileLines: [String]) {
     deadlineTurns = Int(simulationParams[3])!
     maxDronePayload = Int(simulationParams[4])!
     
-    print("Map: [\(mapRows), \(mapColumns)] - Drones: \(numOfDrones) (Max Payload: \(maxDronePayload) units) - Deadline: \(deadlineTurns) turns\n")
+    print("Map: [\(mapRows), \(mapColumns)] - Drones: \(numOfDrones) (Max Payload: \(maxDronePayload)kg) - Deadline: \(deadlineTurns) turns\n")
+    
+}
+
+func parseProductTypesFromInputFile(lines: [String]) -> [Product] {
+    
+    var products:[Product] = []
+    
+    let numOfProductTypes = Int(lines[1])!
+    
+    let productTypes = lines[2].componentsSeparatedByString(" ")
+    
+    for (id, weight) in productTypes.enumerate() {
+        
+        let product = Product(id: id, weight: Int(weight)!)
+        products.append(product)
+    
+    }
+    
+    assert(numOfProductTypes == products.count)
+    print("● Parsed \(numOfProductTypes) products")
+    
+    return products
+
+}
+
+func parseWarehouseDataFromInputFile(lines: [String], andProductCatalog catalog:[Product]) -> [Warehouse] {
+    
+    var warehouses:[Warehouse] = []
+    
+    let numOfWarehouses = Int(lines[3])!
+    
+    var warehouseDataIndex = 4
+    
+    for i in 0..<numOfWarehouses {
+        
+        var inventory: [Product] = []
+        
+        let locationComponents = lines[warehouseDataIndex].componentsSeparatedByString(" ")
+        let location = Point(row: Int(locationComponents[0])!, column: Int(locationComponents[1])!)
+
+        let products = lines[warehouseDataIndex+1].componentsSeparatedByString(" ")
+        
+        for productId in products {
+            
+            let p = catalog.filter({ $0.id == Int(productId)! })[0]
+            inventory.append(p)
+        
+        }
+        
+        let warehouse = Warehouse(id: i, location: location, inventory: inventory)
+        
+        assert(warehouse.inventory.count == products.count)
+
+        warehouses.append(warehouse)
+        
+        warehouseDataIndex += 2
+        
+    }
+    
+    assert(numOfWarehouses == warehouses.count)
+    print("● Parsed data for \(numOfWarehouses) warehouses")
+    
+    return warehouses
+    
+}
+
+func parseOrderDataFromInputFile(lines: [String], andProductCatalog catalog:[Product]) -> [Order] {
+    
+    var orders: [Order] = []
+
+    let numOfWarehouses = Int(lines[3])!
+    var orderDataIndex = 4 + numOfWarehouses * 2
+    
+    let numOfOrders = Int(lines[orderDataIndex])!
+    
+    for i in 0..<numOfOrders {
+        
+        var orderProducts: [Product] = []
+        
+        let locationComponents = lines[orderDataIndex+1].componentsSeparatedByString(" ")
+        let location = Point(row: Int(locationComponents[0])!, column: Int(locationComponents[1])!)
+
+        let numOfProducts = Int(lines[orderDataIndex+2])!
+        
+        let products = lines[orderDataIndex+3].componentsSeparatedByString(" ")
+        
+        for productId in products {
+            
+            let p = catalog.filter({ $0.id == Int(productId)! })[0]
+            orderProducts.append(p)
+       
+        }
+        
+        let order = Order(id: i, deliveryLocation: location, products: orderProducts)
+        
+        assert(order.products.count == numOfProducts)
+        
+        orders.append(order)
+        
+        orderDataIndex += 3
+        
+    }
+    
+    assert(numOfOrders == orders.count)
+    print("● Parsed data for \(numOfOrders) orders")
+
+    return orders
     
 }
