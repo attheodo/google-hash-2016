@@ -10,6 +10,11 @@ import Foundation
 
 typealias Point = (row:Int, column:Int)
 
+enum ServiceClusterStatus {
+    case AwaitingSupply
+    case Supplied
+}
+
 class Product: CustomStringConvertible, Equatable {
     
     var id: Int
@@ -78,6 +83,7 @@ class ServiceCluster: CustomStringConvertible {
     var orders: [Order]
     var surplus: [Product]
     var deficit: [Product]
+    var status: ServiceClusterStatus
     
     init(id: Int, warehouse: Warehouse, orders:[Order]) {
         
@@ -86,6 +92,7 @@ class ServiceCluster: CustomStringConvertible {
         self.orders = orders
         self.surplus = []
         self.deficit = []
+        self.status = .AwaitingSupply
     
     }
     
@@ -104,7 +111,10 @@ class ServiceCluster: CustomStringConvertible {
     // finds surplus and deficit of products based on the orders assigned
     func calculateStock() {
         
-        self.surplus.appendContentsOf(self.products)
+        surplus.removeAll()
+        deficit.removeAll()
+        
+        surplus.appendContentsOf(self.products)
 
         for order in orders {
 
@@ -124,8 +134,8 @@ class ServiceCluster: CustomStringConvertible {
         
     }
     
-    func printStock() {
-        print("🌐: \(id) - 🚩: \(orders.count) - 📦 in 🏢 \(products.count)  - ✅📦: \(surplus.count) - ❌📦: \(deficit.count)")
+    func printStats() {
+        print("🌐: \(id) - 🚩: \(orders.count) - 📦: \(products.count) - ✅📦: \(surplus.count) - ❌📦: \(deficit.count)")
     }
     
    
