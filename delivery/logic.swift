@@ -54,6 +54,8 @@ func serviceClustersBasedOnDistanceForWarehouses(warehouses: [Warehouse], andOrd
         
     }
     
+    serviceClusters.sortInPlace({ $0.orders.count > $1.orders.count })
+    
     print("✔︎ Created \(serviceClusters.count) 🌐 based on warehouse/orders distance.")
     
     return serviceClusters
@@ -64,7 +66,69 @@ func calculateStockForServiceClusters(clusters: [ServiceCluster]) {
     
     for cluster in clusters {
         cluster.calculateStock()
-        cluster.printStock()
+    }
+    
+}
+
+func printServiceClusterStatsForClusters(clusters: [ServiceCluster]) {
+
+    print("\n- Clusters Summary ----------------")
+
+    for cluster in clusters {
+        cluster.printStats()
+    }
+}
+
+func supplyServiceClusters(clusters: [ServiceCluster]) {
+    
+    print("\n 🎉 Starting deficit supply coverage for 🌐s")
+    
+    for cluster in clusters {
+        print("\t・ Supplying 🌐 \(cluster.id)")
+        supplyServiceCluster(cluster, fromOtherServiceClusters: clusters)
+    }
+    
+    print("\t✅ Supply complete")
+}
+
+func supplyServiceCluster(cluster: ServiceCluster, fromOtherServiceClusters clusters: [ServiceCluster]) {
+    
+    var supplierCandidateId = 0
+    var maxDeficitCoverable = 0
+    
+    for c in clusters {
+        
+        if c.surplus.count > 0 {
+            
+            if surplusProductQuantitiesInServiceCluster(c, forProducts: cluster.deficit) > maxDeficitCoverable {
+                supplierCandidateId = c.id
+                maxDeficitCoverable = surplusProductQuantitiesInServiceCluster(c, forProducts: cluster.deficit)
+            }
+        
+        }
+    }
+
+    executeSupplyForCluster(cluster, fromSupplyingCluster: getServiceClusterWithId(supplierCandidateId, fromServiceClusters: clusters))
+    calculateStockForServiceClusters(clusters)
+    
+    if cluster.deficit.count > 0 {
+        supplyServiceCluster(cluster, fromOtherServiceClusters: clusters)
+    }
+    
+    cluster.status = .Supplied
+    
+}
+
+func executeSupplyForCluster(cluster: ServiceCluster, fromSupplyingCluster supplyingCluster: ServiceCluster) {
+    
+    for product in cluster.deficit {
+
+        if supplyingCluster.surplus.contains(product) {
+
+            supplyingCluster.warehouse.inventory.removeObject(product)
+            cluster.warehouse.inventory.append(product)
+
+        }
     }
     
 }
