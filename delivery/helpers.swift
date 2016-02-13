@@ -20,3 +20,26 @@ func distanceBetweenPoint(p1: Point, andPointB p2: Point) -> Int {
     return Int(ceil(sumSquared))
     
 }
+
+func parseInputAtFilePath(filePath: String) -> [String] {
+    
+    let input = try? NSString(contentsOfFile: filePath, encoding: NSUTF8StringEncoding)
+    let lines = input!.componentsSeparatedByString("\n")
+
+    return lines
+    
+}
+
+func parseSimulationParametersFromInputFile(fileLines: [String]) {
+    
+    let simulationParams = fileLines[0].componentsSeparatedByString(" ")
+    
+    mapRows = Int(simulationParams[0])!
+    mapColumns = Int(simulationParams[1])!
+    numOfDrones = Int(simulationParams[2])!
+    deadlineTurns = Int(simulationParams[3])!
+    maxDronePayload = Int(simulationParams[4])!
+    
+    print("Map: [\(mapRows), \(mapColumns)] - Drones: \(numOfDrones) (Max Payload: \(maxDronePayload) units) - Deadline: \(deadlineTurns) turns\n")
+    
+}
