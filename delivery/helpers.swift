@@ -182,3 +182,29 @@ func getOrderWithId(id: Int, fromOrders orders:[Order]) -> Order {
 func getWarehouseWithId(id: Int, fromWarehouses warehouses:[Warehouse]) -> Warehouse {
     return warehouses.filter({ $0.id == id})[0]
 }
+
+func getServiceClusterWithId(id: Int, fromServiceClusters serviceClusters:[ServiceCluster]) -> ServiceCluster {
+    return serviceClusters.filter({ $0.id == id})[0]
+}
+
+
+
+func surplusProductQuantitiesInServiceCluster(cluster: ServiceCluster, forProducts products: [Product]) -> Int {
+    
+    var quantities = 0
+    var stock = cluster.surplus
+    
+    for product in products {
+       
+        if stock.contains(product) {
+            quantities += 1
+            stock.removeObject(product)
+        }
+    
+    }
+    return quantities
+    
+}
+
+
+
