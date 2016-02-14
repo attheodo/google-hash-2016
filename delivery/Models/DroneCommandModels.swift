@@ -83,3 +83,16 @@ class DeliverCommand: DroneCommand {
         
     }
 }
+
+class WaitCommand: DroneCommand {
+    
+    var turns: Int
+    
+    init(droneId: Int, turns: Int) {
+        
+        self.turns = turns
+        
+        super.init(droneId: droneId, type: .Wait)
+        
+    }
+}
