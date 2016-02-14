@@ -18,6 +18,12 @@ extension Array where Element: Equatable {
     }
 }
 
+var startTime = NSDate()
+
+func Tick(){ startTime =  NSDate() }
+func Tock(){
+    print("\n⏱Completed in: \(-startTime.timeIntervalSinceNow)s)")
+}
 
 func distanceBetweenPoint(p1: Point, andPointB p2: Point) -> Int {
     
@@ -188,7 +194,6 @@ func getServiceClusterWithId(id: Int, fromServiceClusters serviceClusters:[Servi
 }
 
 
-
 func surplusProductQuantitiesInServiceCluster(cluster: ServiceCluster, forProducts products: [Product]) -> Int {
     
     var quantities = 0
@@ -205,6 +210,7 @@ func surplusProductQuantitiesInServiceCluster(cluster: ServiceCluster, forProduc
     return quantities
     
 }
+
 
 
 
