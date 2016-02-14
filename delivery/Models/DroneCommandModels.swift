@@ -27,10 +27,18 @@ class DroneCommand {
     }
 }
 
-class LoadCommand: DroneCommand {
+class LoadCommand: DroneCommand, CustomStringConvertible {
     
     var warehouse: Warehouse
     var products: [Product]
+    
+    var cmdRepresentation: String {
+        return "\(droneId) \(type.rawValue) \(warehouse.id) \(products[0].id) \(products.count)"
+    }
+    
+    var description: String {
+        return "🚁\(droneId) ⬅️ 🏢\(warehouse.id) (\(products.count)x📦\(products[0].id))"
+    }
     
     init(droneId: Int, warehouse: Warehouse, productType: Product, productQuantity: Int) {
         
@@ -44,13 +52,22 @@ class LoadCommand: DroneCommand {
         super.init(droneId: droneId, type: .Load)
         
     }
+    
 }
 
-class UnloadCommand: DroneCommand {
+class UnloadCommand: DroneCommand, CustomStringConvertible {
     
     var warehouse: Warehouse
     var products: [Product]
     
+    var cmdRepresentation: String {
+        return "\(droneId) \(type.rawValue) \(warehouse.id) \(products[0].id) \(products.count)"
+    }
+    
+    var description: String {
+        return "🚁\(droneId) ➡️ 🏢\(warehouse.id) (\(products.count)x📦\(products[0].id))"
+    }
+
     init(droneId: Int, warehouse: Warehouse, productType: Product, productQuantity: Int) {
         
         self.warehouse = warehouse
@@ -63,12 +80,23 @@ class UnloadCommand: DroneCommand {
         super.init(droneId: droneId, type: .Unload)
         
     }
+    
+   
 }
 
-class DeliverCommand: DroneCommand {
+class DeliverCommand: DroneCommand, CustomStringConvertible {
     
     var order: Order
     var products: [Product]
+    
+    var cmdRepresentation: String {
+        return "\(droneId) \(type.rawValue) \(order.id) \(products[0].id) \(products.count)"
+    }
+    
+    var description: String {
+        return "🚁\(droneId) ➡️ 🚩\(order.id) (\(products.count)x📦\(products[0].id))"
+    }
+
     
     init(droneId: Int, order: Order, productType: Product, productQuantity: Int) {
         
@@ -84,9 +112,18 @@ class DeliverCommand: DroneCommand {
     }
 }
 
-class WaitCommand: DroneCommand {
+class WaitCommand: DroneCommand, CustomStringConvertible {
     
     var turns: Int
+    
+    var cmdRepresentation: String {
+        return "\(droneId) \(type.rawValue) \(turns)"
+    }
+    
+    var description: String {
+        return "🚁\(droneId) ⏱ \(turns)"
+    }
+
     
     init(droneId: Int, turns: Int) {
         
