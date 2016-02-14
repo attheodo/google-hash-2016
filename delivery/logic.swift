@@ -100,16 +100,17 @@ func supplyServiceCluster(cluster: ServiceCluster, fromOtherServiceClusters clus
         
         if c.surplus.count > 0 {
             
-            if surplusProductQuantitiesInServiceCluster(c, forProducts: cluster.deficit) > maxDeficitCoverable {
+            let surplusQuantities = surplusProductQuantitiesInServiceCluster(c, forProducts: cluster.deficit)
+
+            if surplusQuantities > maxDeficitCoverable {
                 supplierCandidateId = c.id
-                maxDeficitCoverable = surplusProductQuantitiesInServiceCluster(c, forProducts: cluster.deficit)
+                maxDeficitCoverable = surplusQuantities
             }
         
         }
     }
 
     executeSupplyForCluster(cluster, fromSupplyingCluster: getServiceClusterWithId(supplierCandidateId, fromServiceClusters: clusters))
-    calculateStockForServiceClusters(clusters)
     
     if cluster.deficit.count > 0 {
         supplyServiceCluster(cluster, fromOtherServiceClusters: clusters)
@@ -126,7 +127,9 @@ func executeSupplyForCluster(cluster: ServiceCluster, fromSupplyingCluster suppl
         if supplyingCluster.surplus.contains(product) {
 
             supplyingCluster.warehouse.inventory.removeObject(product)
+            supplyingCluster.surplus.removeObject(product)
             cluster.warehouse.inventory.append(product)
+            cluster.deficit.removeObject(product)
 
         }
     }
