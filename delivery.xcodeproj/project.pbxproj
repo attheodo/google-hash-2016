@@ -12,10 +12,11 @@
 		4D1674221C6EA59000D1D91F /* HelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1674211C6EA59000D1D91F /* HelperTests.swift */; };
 		4D1674231C6EA7F500D1D91F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58D2531C6E9B0C001E1589 /* main.swift */; };
 		4D1674241C6EA7F800D1D91F /* helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D16741F1C6EA18300D1D91F /* helpers.swift */; };
-		4D1674261C6F32DF00D1D91F /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1674251C6F32DF00D1D91F /* models.swift */; };
-		4D1674271C6F370600D1D91F /* models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1674251C6F32DF00D1D91F /* models.swift */; };
 		4D1674291C6F67DB00D1D91F /* logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1674281C6F67DB00D1D91F /* logic.swift */; };
 		4D58D2541C6E9B0C001E1589 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D58D2531C6E9B0C001E1589 /* main.swift */; };
+		4D7D0B701C713F8B00B0802C /* DroneCommandModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7D0B6F1C713F8B00B0802C /* DroneCommandModels.swift */; };
+		4D7D0B721C713FD300B0802C /* ServiceClusterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7D0B711C713FD300B0802C /* ServiceClusterModel.swift */; };
+		4D7D0B741C71401A00B0802C /* PrimitiveModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7D0B731C71401A00B0802C /* PrimitiveModels.swift */; };
 		5D58540ED5EB2D508E3263AA /* Pods_delivery_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 334DDEC23F7464E0CF6247B9 /* Pods_delivery_tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,10 +39,12 @@
 		4D16741B1C6E9CAA00D1D91F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D16741F1C6EA18300D1D91F /* helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = helpers.swift; sourceTree = "<group>"; };
 		4D1674211C6EA59000D1D91F /* HelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperTests.swift; sourceTree = "<group>"; };
-		4D1674251C6F32DF00D1D91F /* models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = models.swift; sourceTree = "<group>"; };
 		4D1674281C6F67DB00D1D91F /* logic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = logic.swift; sourceTree = "<group>"; };
 		4D58D2501C6E9B0C001E1589 /* delivery */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = delivery; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D58D2531C6E9B0C001E1589 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		4D7D0B6F1C713F8B00B0802C /* DroneCommandModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DroneCommandModels.swift; path = Models/DroneCommandModels.swift; sourceTree = "<group>"; };
+		4D7D0B711C713FD300B0802C /* ServiceClusterModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceClusterModel.swift; path = Models/ServiceClusterModel.swift; sourceTree = "<group>"; };
+		4D7D0B731C71401A00B0802C /* PrimitiveModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrimitiveModels.swift; path = Models/PrimitiveModels.swift; sourceTree = "<group>"; };
 		7B1DF2752ED1C25C7B9ED03C /* Pods-delivery_tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-delivery_tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-delivery_tests/Pods-delivery_tests.release.xcconfig"; sourceTree = "<group>"; };
 		81A506095D646B0C755BCC37 /* Pods-delivery_tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-delivery_tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-delivery_tests/Pods-delivery_tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -108,11 +111,21 @@
 			isa = PBXGroup;
 			children = (
 				4D58D2531C6E9B0C001E1589 /* main.swift */,
-				4D1674251C6F32DF00D1D91F /* models.swift */,
+				4D7D0B6E1C713F5E00B0802C /* Models */,
 				4D1674281C6F67DB00D1D91F /* logic.swift */,
 				4D16741F1C6EA18300D1D91F /* helpers.swift */,
 			);
 			path = delivery;
+			sourceTree = "<group>";
+		};
+		4D7D0B6E1C713F5E00B0802C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4D7D0B731C71401A00B0802C /* PrimitiveModels.swift */,
+				4D7D0B711C713FD300B0802C /* ServiceClusterModel.swift */,
+				4D7D0B6F1C713F8B00B0802C /* DroneCommandModels.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		6FE12F827E3191BEBB4B424E /* Frameworks */ = {
@@ -262,7 +275,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4D1674271C6F370600D1D91F /* models.swift in Sources */,
 				4D16741A1C6E9CAA00D1D91F /* delivery_tests.swift in Sources */,
 				4D1674221C6EA59000D1D91F /* HelperTests.swift in Sources */,
 				4D1674231C6EA7F500D1D91F /* main.swift in Sources */,
@@ -274,9 +286,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D7D0B721C713FD300B0802C /* ServiceClusterModel.swift in Sources */,
 				4D1674291C6F67DB00D1D91F /* logic.swift in Sources */,
 				4D58D2541C6E9B0C001E1589 /* main.swift in Sources */,
-				4D1674261C6F32DF00D1D91F /* models.swift in Sources */,
+				4D7D0B701C713F8B00B0802C /* DroneCommandModels.swift in Sources */,
+				4D7D0B741C71401A00B0802C /* PrimitiveModels.swift in Sources */,
 				4D1674201C6EA18300D1D91F /* helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
