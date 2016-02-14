@@ -10,8 +10,8 @@ import Foundation
 
 //let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/busy_day.in"
 //let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/mother_of_all_warehouses.in"
-let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/simple.in"
-//let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/redundancy.in"
+//let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/simple.in"
+let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/redundancy.in"
 
 // Simulation Parameters
 var mapRows: Int = 0
@@ -34,9 +34,12 @@ products = parseProductTypesFromInputFile(inputFile)
 warehouses = parseWarehouseDataFromInputFile(inputFile, andProductCatalog: products)
 orders = parseOrderDataFromInputFile(inputFile, andProductCatalog: products)
 
+Tick()
 
 let serviceClusters = serviceClustersBasedOnDistanceForWarehouses(warehouses, andOrders: orders)
 calculateStockForServiceClusters(serviceClusters)
 printServiceClusterStatsForClusters(serviceClusters)
 supplyServiceClusters(serviceClusters)
 printServiceClusterStatsForClusters(serviceClusters)
+
+Tock()
