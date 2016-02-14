@@ -22,7 +22,7 @@ var startTime = NSDate()
 
 func Tick(){ startTime =  NSDate() }
 func Tock(){
-    print("\n⏱Completed in: \(-startTime.timeIntervalSinceNow)s)")
+    print("\n⏱ Completed in: \(-startTime.timeIntervalSinceNow) sec")
 }
 
 func distanceBetweenPoint(p1: Point, andPointB p2: Point) -> Int {
