@@ -8,13 +8,17 @@
 
 import Foundation
 
-class Product: CustomStringConvertible, Equatable {
+class Product: CustomStringConvertible, Equatable, Hashable {
     
     var id: Int
     var weight: Int
     
     var description:String {
         return "📦: 🏷\(id) (\(weight)kg)"
+    }
+    
+    var hashValue: Int {
+        return id.hashValue
     }
 
     init(id: Int, weight: Int) {
@@ -23,6 +27,8 @@ class Product: CustomStringConvertible, Equatable {
         self.weight = weight
         
     }
+    
+    
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {
