@@ -65,7 +65,48 @@ class ServiceCluster: CustomStringConvertible {
     }
     
     func printStats() {
-        print("\t\t🌐: \(id) - 🚩: \(orders.count) - 📦: \(products.count) - ✅📦: \(surplus.count) - ❌📦: \(deficit.count)")
+        print("\t\t🌐: \(id) - 🚩: \(orders.count - orders.filter({ $0.isFullfilled == true}).count) - 📦: \(products.count) - ✅📦: \(surplus.count) - ❌📦: \(deficit.count)")
     }
+    
+    func mostWantedProduct() -> (product: Product, quantity: Int) {
+        
+        var quantity: [Product: Int] = [:]
+        
+        for p in deficit {
+            quantity[p] = (quantity[p] ?? 0) + 1
+        }
+        
+        let result = quantity.sort({ $0.1 > $1.1})
+        return (product: result[0].0, quantity: result[0].1)
+        
+    }
+    
+    func removeFromInventory(product: Product, quantity: Int) {
+        
+        var q = quantity
+        
+        while q != 0 {
+            warehouse.inventory.removeObject(product)
+            if surplus.contains(product) {
+                surplus.removeObject(product)
+            }
+            q -= 1
+        }
+    }
+    
+    func addToInventory(product: Product, quantity: Int) {
+        
+        var q = quantity
+        
+        while q != 0 {
+            warehouse.inventory.append(product)
+            if deficit.contains(product) {
+                deficit.removeObject(product)
+            }
+            q -= 1
+        }
+    }
+
+
     
 }
