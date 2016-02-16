@@ -16,7 +16,7 @@ class Order: CustomStringConvertible {
     var products: [Product] {
         didSet {
             if products.count == 0 {
-                print("\t🚩\(id) fullfilled! 🎉")
+                print("\t✅ 🚩\(id) fullfilled! 🎉")
                 isFullfilled = true
             }
         }
@@ -45,7 +45,8 @@ class Order: CustomStringConvertible {
         }
     }
         
-    func mostWantedProduct() -> Product {
+
+    func mostWantedProduct() -> (product: Product, quantity: Int) {
         
         var quantity: [Product: Int] = [:]
         
@@ -54,8 +55,9 @@ class Order: CustomStringConvertible {
         }
         
         let result = quantity.sort({ $0.1 > $1.1})
-        return result[0].0
+        return (product: result[0].0, quantity: result[0].1)
         
     }
+
     
 }
