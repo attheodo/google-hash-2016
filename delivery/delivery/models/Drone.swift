@@ -15,6 +15,9 @@ class Drone {
     var location: Point
     var inventory: [Product]
     var workload:Int
+    var isAvailable:Bool {
+        return workload == 0
+    }
     
     init(id: Int, location: Point, maxPayload: Int, inventory: [Product]) {
 
@@ -60,15 +63,15 @@ class Drone {
         
         flyTo(clusterA.warehouse.location)
         loadProduct(product, quantity: quantity)
-        clusterA.warehouse.removeFromInventory(product, quantity: quantity)
+        clusterA.removeFromInventory(product, quantity: quantity)
         // TODO: log actual command
         
         flyTo(clusterB.warehouse.location)
         unloadProduct(product, quantity: quantity)
-        clusterB.warehouse.addToInventory(product, quantity: quantity)
+        clusterB.addToInventory(product, quantity: quantity)
         // TODO: log actual command
         
-        print("\t🚁\(id) moving (\(quantity) x 📦\(product.id)) from 🌐\(clusterA.id) to 🌐\(clusterB.id) (⏱: \(workload))")
+        print("\n\t🚁\(id) moving (\(quantity) x 📦\(product.id)) (\(product.weight * quantity)kg) from 🌐\(clusterA.id) to 🌐\(clusterB.id) (⏱: \(workload))\n")
 
     }
     
@@ -76,7 +79,7 @@ class Drone {
         
         flyTo(cluster.warehouse.location)
         loadProduct(product, quantity: quantity)
-        cluster.warehouse.removeFromInventory(product, quantity: quantity)
+        cluster.removeFromInventory(product, quantity: quantity)
         // TODO: log actual command
         
         flyTo(order.location)
@@ -84,8 +87,18 @@ class Drone {
         order.markDelivered(product, quantity: quantity)
         // TODO: log actuall command
         
-        print("\t🚁\(id) delivering (\(quantity) x 📦\(product.id)) from 🌐\(cluster.id) to 🚩\(order.id) (⏱: \(workload))")
+        print("\n\t🚁\(id) delivering (\(quantity) x 📦\(product.id) (\(product.weight * quantity)kg) from 🌐\(cluster.id) to 🚩\(order.id) (⏱: \(workload))\n")
     
+    }
+    
+    func executeWorkstep() {
+        if workload > 0 {
+            workload -= 1
+        }
+    }
+    
+    func maxLoadableQuantityForProduct(product: Product) -> Int {
+        return Int(floor(Float(maxPayload/product.weight)))
     }
     
 }
