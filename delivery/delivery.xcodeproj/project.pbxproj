@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		4D5803971C725E0F00E179DD /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803961C725E0F00E179DD /* main.swift */; };
 		4D5803A21C725E7800E179DD /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803A11C725E7800E179DD /* Parser.swift */; };
+		4D5803A41C7261FB00E179DD /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803A31C7261FB00E179DD /* Product.swift */; };
+		4D5803A71C7262DC00E179DD /* Warehouse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803A61C7262DC00E179DD /* Warehouse.swift */; };
+		4D5803A91C7264D600E179DD /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803A81C7264D600E179DD /* Helpers.swift */; };
+		4D5803AB1C72652B00E179DD /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803AA1C72652B00E179DD /* Order.swift */; };
+		4D5803AD1C7265FA00E179DD /* Simulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803AC1C7265FA00E179DD /* Simulation.swift */; };
+		4D5803AF1C72671E00E179DD /* Drone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803AE1C72671E00E179DD /* Drone.swift */; };
+		4D5803B11C72694D00E179DD /* ServiceCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5803B01C72694D00E179DD /* ServiceCluster.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +34,13 @@
 		4D5803931C725E0F00E179DD /* delivery */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = delivery; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D5803961C725E0F00E179DD /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		4D5803A11C725E7800E179DD /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		4D5803A31C7261FB00E179DD /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Product.swift; path = models/Product.swift; sourceTree = "<group>"; };
+		4D5803A61C7262DC00E179DD /* Warehouse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Warehouse.swift; path = models/Warehouse.swift; sourceTree = "<group>"; };
+		4D5803A81C7264D600E179DD /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Helpers.swift; path = helpers/Helpers.swift; sourceTree = "<group>"; };
+		4D5803AA1C72652B00E179DD /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Order.swift; path = models/Order.swift; sourceTree = "<group>"; };
+		4D5803AC1C7265FA00E179DD /* Simulation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Simulation.swift; path = models/Simulation.swift; sourceTree = "<group>"; };
+		4D5803AE1C72671E00E179DD /* Drone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Drone.swift; path = models/Drone.swift; sourceTree = "<group>"; };
+		4D5803B01C72694D00E179DD /* ServiceCluster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceCluster.swift; path = models/ServiceCluster.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,8 +75,23 @@
 			children = (
 				4D5803961C725E0F00E179DD /* main.swift */,
 				4D5803A11C725E7800E179DD /* Parser.swift */,
+				4D5803A81C7264D600E179DD /* Helpers.swift */,
+				4D5803A51C7262C800E179DD /* Models */,
 			);
 			path = delivery;
+			sourceTree = "<group>";
+		};
+		4D5803A51C7262C800E179DD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4D5803A31C7261FB00E179DD /* Product.swift */,
+				4D5803B01C72694D00E179DD /* ServiceCluster.swift */,
+				4D5803AE1C72671E00E179DD /* Drone.swift */,
+				4D5803AC1C7265FA00E179DD /* Simulation.swift */,
+				4D5803AA1C72652B00E179DD /* Order.swift */,
+				4D5803A61C7262DC00E179DD /* Warehouse.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,8 +151,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D5803AB1C72652B00E179DD /* Order.swift in Sources */,
 				4D5803A21C725E7800E179DD /* Parser.swift in Sources */,
+				4D5803A71C7262DC00E179DD /* Warehouse.swift in Sources */,
 				4D5803971C725E0F00E179DD /* main.swift in Sources */,
+				4D5803AD1C7265FA00E179DD /* Simulation.swift in Sources */,
+				4D5803A91C7264D600E179DD /* Helpers.swift in Sources */,
+				4D5803AF1C72671E00E179DD /* Drone.swift in Sources */,
+				4D5803A41C7261FB00E179DD /* Product.swift in Sources */,
+				4D5803B11C72694D00E179DD /* ServiceCluster.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +279,7 @@
 				4D58039C1C725E0F00E179DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
