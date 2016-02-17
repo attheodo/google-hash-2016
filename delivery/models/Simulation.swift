@@ -170,9 +170,6 @@ class Simulation {
             
             let unfullfilledOrders = c.orders.filter({ $0.isFullfilled == false })
             
-
-            
-            
             for o in unfullfilledOrders {
                 
                 
@@ -196,10 +193,6 @@ class Simulation {
                 
             
         }
-    
-        
-        
-        //isFinished = true
         
     }
     
