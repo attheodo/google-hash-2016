@@ -8,19 +8,21 @@
 
 import Foundation
 
-//let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/busy_day.in"
-let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/mother_of_all_warehouses.in"
+let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/busy_day.in"
+//let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/mother_of_all_warehouses.in"
 //let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/simple.in"
 //let inputFilePath = "/Users/thanosth/Documents/dev/google-hash-2016/specs/redundancy.in"
 
 startTimer()
 
+let queue = QOS_CLASS_USER_INITIATED
 let parser = Parser(filePath: inputFilePath)
 
-let simulation = Simulation(products: parser.products, orders: parser.orders, warehouses: parser.warehouses, numOfDrones: parser.numOfDrones, maxDronePayload: parser.maxDronePayload, deadline: parser.deadline, percentageOfDeliveryDrones: 70)
+let simulation = Simulation(products: parser.products, orders: parser.orders, warehouses: parser.warehouses, numOfDrones: parser.numOfDrones, maxDronePayload: parser.maxDronePayload, deadline: parser.deadline, percentageOfDeliveryDrones: 100)
 
 simulation.createServiceClusters()
 simulation.printClusterStats()
 simulation.startSimulation()
+
 
 stopTimer()

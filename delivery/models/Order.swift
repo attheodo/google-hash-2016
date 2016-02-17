@@ -13,15 +13,7 @@ class Order: CustomStringConvertible {
     var id: Int
     var location: Point
     var isFullfilled: Bool
-    var products: [Product] {
-        didSet {
-            if products.count == 0 {
-                print("\t✅ 🚩\(id) fullfilled! 🎉")
-                isFullfilled = true
-            }
-        }
-    }
-    
+    var products: [Product]    
     var description: String {
         return "🚩: 🏷\(id) - 📍[\(location.row),\(location.column)] - # 📦 \(products.count)\n"
     }
@@ -37,25 +29,32 @@ class Order: CustomStringConvertible {
     
     func markDelivered(product: Product, quantity: Int) {
 
-        var q = quantity
-        
-        while q != 0 {
-            products.removeObject(product)
-            q -= 1
+        for _ in 0..<quantity {
+            self.products.removeObject(product)
         }
+        
+        if products.count == 0 {
+            print("\t✅ 🚩\(id) fullfilled! 🎉")
+            isFullfilled = true
+        }
+
+        
     }
         
 
-    func mostWantedProduct() -> (product: Product, quantity: Int) {
-        
-        var quantity: [Product: Int] = [:]
-        
-        for p in products {
-            quantity[p] = (quantity[p] ?? 0) + 1
-        }
-        
-        let result = quantity.sort({ $0.1 > $1.1})
-        return (product: result[0].0, quantity: result[0].1)
+    func mostWantedProduct() -> (product: Product, quantity: Int)? {
+//        
+//        var quantity: [Product: Int] = [:]
+//        
+//       
+//        for p in self.products {
+//            quantity[p] = (quantity[p] ?? 0) + 1
+//        }
+//        
+//        let result = quantity.sort({ $0.1 > $1.1})
+//        return (product: result[0].0, quantity: result[0].1)
+
+        return (product: products[0], quantity: 1)
         
     }
 

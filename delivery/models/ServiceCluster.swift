@@ -15,6 +15,7 @@ class ServiceCluster: CustomStringConvertible {
     var orders: [Order]
     var surplus: [Product]
     var deficit: [Product]
+    var products: [Product]
     
     init(id: Int, warehouse: Warehouse, orders:[Order]) {
         
@@ -23,12 +24,11 @@ class ServiceCluster: CustomStringConvertible {
         self.orders = orders
         self.surplus = []
         self.deficit = []
+        self.products = []
+        self.products.appendContentsOf(self.warehouse.inventory)
         
     }
-    
-    var products: [Product] {
-        return warehouse.inventory
-    }
+
     
     var description: String {
         return "🌐: \(id) - 🏢: \(warehouse.id) - # 🚩 \(orders.count)"
@@ -44,7 +44,7 @@ class ServiceCluster: CustomStringConvertible {
         surplus.removeAll()
         deficit.removeAll()
         
-        surplus.appendContentsOf(self.products)
+        surplus.appendContentsOf(self.warehouse.inventory)
         
         for order in orders {
             
@@ -70,42 +70,55 @@ class ServiceCluster: CustomStringConvertible {
     
     func mostWantedProduct() -> (product: Product, quantity: Int) {
         
-        var quantity: [Product: Int] = [:]
-        
-        for p in deficit {
-            quantity[p] = (quantity[p] ?? 0) + 1
-        }
-        
-        let result = quantity.sort({ $0.1 > $1.1})
-        return (product: result[0].0, quantity: result[0].1)
-        
+//        var quantity: [Product: Int] = [:]
+//        
+//        for p in deficit {
+//            quantity[p] = (quantity[p] ?? 0) + 1
+//        }
+//        
+//        let result = quantity.sort({ $0.1 > $1.1})
+//        return (product: result[0].0, quantity: result[0].1)
+
+        return (product: deficit[0], quantity: 1)
     }
     
     func removeFromInventory(product: Product, quantity: Int) {
         
-        var q = quantity
-        
-        while q != 0 {
-            warehouse.inventory.removeObject(product)
-            if surplus.contains(product) {
-                surplus.removeObject(product)
-            }
-            q -= 1
+        for _ in 0..<quantity {
+
+            self.products.removeObject(product)
+            
         }
+        
     }
     
     func addToInventory(product: Product, quantity: Int) {
         
-        var q = quantity
+        for _ in 0..<quantity {
+            
+            self.products.append(product)
+            
+        }
+                
+    }
+    
+    func removeFromSurplus(product: Product, quantity: Int) {
         
-        while q != 0 {
-            warehouse.inventory.append(product)
-            if deficit.contains(product) {
-                deficit.removeObject(product)
+        for _ in 0..<quantity {
+            
+            if self.surplus.contains(product) {
+                self.surplus.removeObject(product)
             }
-            q -= 1
         }
     }
+    
+    func removeFromDeficit(product: Product, quantity: Int) {
+        
+        for _ in 0..<quantity {
+            self.deficit.removeObject(product)
+        }
+    }
+    
 
 
     

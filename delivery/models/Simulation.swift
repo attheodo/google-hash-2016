@@ -21,6 +21,8 @@ class Simulation {
     var supplyDrones:[Drone]
     var clusters:[ServiceCluster]!
     
+    var cmdLog:[String]
+    
     init(products: [Product], orders: [Order], warehouses: [Warehouse], numOfDrones: Int, maxDronePayload: Int, deadline: Int, percentageOfDeliveryDrones: Int) {
         
         self.deadline = deadline
@@ -32,6 +34,8 @@ class Simulation {
         self.warehouses = warehouses
         self.deliveryDrones = []
         self.supplyDrones = []
+        
+        self.cmdLog = []
         
         let numOfDeliveryDrones = floor(Float(numOfDrones) * (Float(percentageOfDeliveryDrones)/100))
 
@@ -129,87 +133,150 @@ class Simulation {
         }
         
         printClusterStats()
+        writeCommandLog()
     }
     
     func executeTurn() {
-        print("⏱ Turn: \(currentTurn)")
+
+        let unfullfilledOrders = totalUnfullfilledOrders()
+        print("⏱ Turn: \(currentTurn) - Unfullfilled 🚩: \(unfullfilledOrders) - Supply 🚁: \(supplyDrones.count), Delivery 🚁: \(deliveryDrones.count)")
         
-        for c in clusters {
+        if unfullfilledOrders == 0 {
+            isFinished = true
+            return
+        }
+        
+        for c in self.clusters {
             
             let unfullfilledOrders = c.orders.filter({ $0.isFullfilled == false })
             
-            if unfullfilledOrders.count == 0 {
-                isFinished = true
-                return
-            }
-            
-            // for each unfullfilled order
-            for o in unfullfilledOrders {
 
+            
+            
+            for o in unfullfilledOrders {
+                
+                
                 if c.deficit.count > 0 {
-                    partiallyCoverDeficitForCluster(c)
+                    self.partiallyCoverDeficitForCluster(c)
                 }
                 
-               deliverProductsForOrder(o, fromCluster: c)
+                self.deliverProductsForOrder(o, fromCluster: c)
+                
                 
             }
             
             // merge all kind of drones and have them execute
-            for drone in supplyDrones {
+            for drone in self.supplyDrones {
                 drone.executeWorkstep()
             }
             
-            for drone in deliveryDrones {
+            for drone in self.deliveryDrones {
                 drone.executeWorkstep()
             }
+                
+            
         }
+    
+        
+        
+        //isFinished = true
         
     }
     
     func deliverProductsForOrder(order: Order, fromCluster cluster: ServiceCluster) {
         //print("\t・Delivering products for 🚩\(order.id) from 🌐\(cluster.id)")
+        if !availableDronesOfType("deliver") {
+            
+            let idlingSupplyDrones = supplyDrones.filter({ $0.isAvailable == true })
+            
+            if idlingSupplyDrones.count > 0 && supplyDrones.count > 2 {
+                deliveryDrones.append(idlingSupplyDrones[0])
+                supplyDrones.removeObject(idlingSupplyDrones[0])
+
+            }
+            
+            return
+        }
+        
         if let drone = findAvailableDroneOfType("Deliver", nearCluster: cluster) {
-          //  print("\t\t→ Found available delivery drone 🚁\(drone.id)")
-            let mostWantedProduct = order.mostWantedProduct()
+            //print("\t\t→ Found available delivery drone 🚁\(drone.id)")
+            guard let mostWantedProduct = order.mostWantedProduct() else {
+                return
+            }
            
             if cluster.products.filter({ $0 == mostWantedProduct.product}).count >= mostWantedProduct.quantity {
-                let quantity = min(mostWantedProduct.quantity, drone.maxLoadableQuantityForProduct(mostWantedProduct.product))
+                let quantity = 1//min(mostWantedProduct.quantity, drone.maxLoadableQuantityForProduct(mostWantedProduct.product))
                 drone.deliverProduct(mostWantedProduct.product, quantity: quantity, fromCluster: cluster, forOrder: order)
             } else {
-                // TODO: make drone wait a bit
+                return
             }
             
         } else {
-            //print("\t\t❌ No available delivery drone nearby")
+            print("\t\t❌ No available delivery drone nearby")
             return
         }
     }
     
     func partiallyCoverDeficitForCluster(cluster: ServiceCluster) {
         
-        //print("\t・Partially covering deficit for 🌐\(cluster.id)")
-        let mostWantedProduct = cluster.mostWantedProduct()
-        let nearestCluster = findNearestClusterWithProduct(mostWantedProduct.product, andQuantity: mostWantedProduct.quantity)
-        //print("\t\t→ Nearest 🌐 with \(mostWantedProduct.quantity) x 📦\(mostWantedProduct.product.id) is 🌐\(nearestCluster.id)")
-        
-        if let drone = findAvailableDroneOfType("supply", nearCluster: nearestCluster) {
-        
-            //print("\t\t→ Found available supply drone 🚁\(drone.id)")
-            let quantity = min(mostWantedProduct.quantity, drone.maxLoadableQuantityForProduct(mostWantedProduct.product))
-            drone.moveProduct(mostWantedProduct.product, quantity: quantity, fromCluster: nearestCluster, toCluster: cluster)
-        
-        } else {
-            //print("\t\t❌ No available supply drone nearby")
+        if !availableDronesOfType("supply") {
+            
+            let idlingDeliveryDrones = deliveryDrones.filter({ $0.isAvailable == true })
+            
+            if idlingDeliveryDrones.count > 9 && deliveryDrones.count > 2 {
+                supplyDrones.append(idlingDeliveryDrones[0])
+                deliveryDrones.removeObject(idlingDeliveryDrones[0])
+            }
+            
             return
         }
+        //print("\t・Partially covering deficit for 🌐\(cluster.id)")
+        let mostWantedProduct = cluster.mostWantedProduct()
+        
+        if let nearestCluster = findNearestClusterWithProduct(mostWantedProduct.product, andQuantity: 1/*mostWantedProduct.quantity*/, forCluster: cluster) {
+            //print("\t\t→ Nearest 🌐 with \(mostWantedProduct.quantity) x 📦\(mostWantedProduct.product.id) is 🌐\(nearestCluster.id)")
+            
+            if let drone = findAvailableDroneOfType("supply", nearCluster: nearestCluster) {
+                
+                //print("\t\t→ Found available supply drone 🚁\(drone.id)")
+                let quantity = 1/*min(mostWantedProduct.quantity, drone.maxLoadableQuantityForProduct(mostWantedProduct.product))*/
+                drone.moveProduct(mostWantedProduct.product, quantity: quantity, fromCluster: nearestCluster, toCluster: cluster)
+                
+            } else {
+                print("\t\t❌ No available supply drone nearby")
+                return
+            }
 
+        } else {
+            print("nearest cluster not found")
+            return
+        }
+        
         
     }
     
-    func findNearestClusterWithProduct(product: Product, andQuantity quantity:Int) -> ServiceCluster {
-        let clusters = self.clusters.filter({ $0.surplus.filter({ $0.id == product.id}).count >= quantity })
-        // TODO: also filter by distance
-        return clusters[0]
+    func findNearestClusterWithProduct(product: Product, andQuantity quantity:Int, forCluster cluster:ServiceCluster) -> ServiceCluster? {
+        
+       let clusters = self.clusters.filter({ $0.surplus.filter({ $0.id == product.id}).count >= quantity })
+        
+        if clusters.count == 0 {
+            return nil
+        }
+        
+        var nearestCluster = clusters[0]
+        var minDistance = distanceBetweenPoint(cluster.warehouse.location, andPointB: nearestCluster.warehouse.location)
+        
+        for c in clusters {
+            
+            let d = distanceBetweenPoint(c.warehouse.location, andPointB: cluster.warehouse.location)
+            
+            if d < minDistance {
+                minDistance = d
+                nearestCluster = c
+            }
+        }
+        
+        return nearestCluster
     }
     
     func findAvailableDroneOfType(type:String, nearCluster cluster: ServiceCluster) -> Drone? {
@@ -239,8 +306,68 @@ class Simulation {
         }
         
         return nearestDrone
-            
        
+    }
+    
+    func availableDronesOfType(type:String) -> Bool {
+        
+        let availableDrones:[Drone]?
+        
+        if type == "supply" {
+            availableDrones = supplyDrones.filter({ $0.isAvailable == true })
+        } else {
+            availableDrones = deliveryDrones.filter({ $0.isAvailable == true })
+        }
+        
+        return availableDrones!.count > 0
+    }
+    
+    func totalUnfullfilledOrders() -> Int {
+        
+        var unfullFilledOrders = 0
+        
+        for c in clusters {
+            let clusterUnfullfilledOrders = c.orders.filter({ $0.isFullfilled == false }).count
+            unfullFilledOrders += clusterUnfullfilledOrders
+        }
+        
+        return unfullFilledOrders
+    }
+    
+    func logLoadCommand(drone: Drone, warehouse: Warehouse, product: Product, quantity: Int) {
+        
+            self.cmdLog.append("\(drone.id) L \(warehouse.id) \(product.id) \(quantity)")
+        
+    }
+    
+    func logUnloadCommand(drone: Drone, warehouse: Warehouse, product: Product, quantity: Int) {
+        
+            self.cmdLog.append("\(drone.id) U \(warehouse.id) \(product.id) \(quantity)")
+        
+    }
+    
+    func logDeliverCommand(drone: Drone, order: Order, product: Product, quantity: Int) {
+        
+            self.cmdLog.append("\(drone.id) D \(order.id) \(product.id) \(quantity)")
+        
+    }
+    
+    func logWaitCommand(drone: Drone, turns: Int) {
+        self.cmdLog.append("\(drone.id) W \(turns)")
+    }
+    
+    func writeCommandLog() {
+      
+        let currentPath = NSFileManager.defaultManager().currentDirectoryPath
+        var outputFile = (inputFilePath.componentsSeparatedByString("/").last)!.componentsSeparatedByString(".")[0]
+        outputFile = "\(outputFile).out"
+        let outputFilePath = "\(currentPath)/\(outputFile)"
+        
+        var commands = cmdLog.joinWithSeparator("\n")
+        commands = "\(cmdLog.count)\n" + commands
+
+        print(outputFilePath)
+        try? commands.writeToFile(outputFilePath, atomically: true, encoding: NSUTF8StringEncoding)
     }
     
 }

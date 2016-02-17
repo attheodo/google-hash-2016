@@ -27,9 +27,6 @@ class Warehouse: CustomStringConvertible {
         self.inventory = inventory
 
     }
-    
-    func quantityOfProductInInventory(product: Product) -> Int {
-        return inventory.filter({ $0.id == product.id }).count
-    }
+
     
 }
