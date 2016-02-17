@@ -5,6 +5,8 @@ order to run you'll need to open the XCode project and change the `inputFile` pa
 
 ### Example output
 
+![Screenshot](https://github.com/attheodo/google-hash-2016/blob/master/screenshot/screenshot.png)
+
 ### Key Concepts
 - Each warehouse becomes a `ServiceCluster`. `ServiceClusters` are assigned to fulfill the orders that are nearest to it's warehouse. The are as many `ServiceClusters` as warehouses in each simulation. The simulation starts with the cluster that has been assigned with the most orders.
 - Before the simulation starts, for each cluster, the `surplus` and `deficit` products are calculated by the `ServiceCluster.calculateStock()` method. Essentially it finds which kind of products the cluster is missing to fulfill its orders (deficit) and how many products we have and we can spare to other clusters.
