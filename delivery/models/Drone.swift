@@ -67,7 +67,6 @@ class Drone: CustomStringConvertible, Equatable  {
     
     func moveProduct(product: Product, quantity: Int, fromCluster clusterA: ServiceCluster, toCluster clusterB: ServiceCluster) {
         
-        
         flyTo(clusterA.warehouse.location)
         loadProduct(product, quantity: quantity)
         clusterA.removeFromInventory(product, quantity: quantity)
@@ -79,7 +78,9 @@ class Drone: CustomStringConvertible, Equatable  {
         clusterB.addToInventory(product, quantity: quantity)
         clusterB.removeFromDeficit(product, quantity: quantity)
         simulation.logUnloadCommand(self, warehouse: clusterB.warehouse, product: product, quantity: quantity)
-        
+            
+        let p = ProductLocation(productId: product.id, warehouseId: clusterB.warehouse.id)
+        simulation.productLeadTimes[p] = self.workload
         
         print("\n\t🚁\(id) moving (\(quantity) x 📦\(product.id)) (\(product.weight * quantity)kg) from 🌐\(clusterA.id) to 🌐\(clusterB.id) (⏱: \(workload))\n")
 
@@ -88,10 +89,25 @@ class Drone: CustomStringConvertible, Equatable  {
     
     func deliverProduct(product: Product, quantity: Int, fromCluster cluster: ServiceCluster, forOrder order: Order) {
        
+        let p = ProductLocation(productId: product.id, warehouseId: cluster.warehouse.id)
+        
+        if simulation.productLeadTimes[p] != nil {
+            
+            let waitTurns = simulation.productLeadTimes[p]!
+            
+            wait(waitTurns)
+            simulation.logWaitCommand(self, turns: waitTurns)
+            
+            print("\n\t🚁\(id) will wait \(waitTurns) before trying to deliver 📦\(product.id) from 🌐\(cluster.id)")
+            
+            simulation.productLeadTimes[p] = nil
+            
+            return
+            
+        }
         
         flyTo(cluster.warehouse.location)
-        wait(350)
-        simulation.logWaitCommand(self, turns: 350)
+        
         loadProduct(product, quantity: quantity)
         cluster.removeFromInventory(product, quantity: quantity)
         simulation.logLoadCommand(self, warehouse: cluster.warehouse, product: product, quantity: quantity)
