@@ -8,6 +8,20 @@
 
 import Foundation
 
+struct ProductLocation: Hashable, Equatable {
+    
+    var productId: Int
+    var warehouseId: Int
+    
+    var hashValue: Int {
+        return productId.hashValue + warehouseId.hashValue
+    }
+}
+
+func ==(lhs: ProductLocation, rhs: ProductLocation) -> Bool {
+    return lhs.productId == rhs.productId && lhs.warehouseId == rhs.warehouseId
+}
+
 class Simulation {
     
     var deadline: Int
@@ -20,6 +34,12 @@ class Simulation {
     var deliveryDrones:[Drone]
     var supplyDrones:[Drone]
     var clusters:[ServiceCluster]!
+    
+    var productLeadTimes:[ProductLocation: Int] = [:]
+    
+    var maxWorkload: Int = 0
+    var maxWait: Int = 0
+
     
     var cmdLog:[String]
     
