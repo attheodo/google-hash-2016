@@ -16,8 +16,11 @@ class Drone: CustomStringConvertible, Equatable  {
     var inventory: [Product]
     var workload:Int
     var isAvailable:Bool {
-        return workload == 0
+        return workload == 0 && totalWorkload <= simulation.deadline
     }
+    var hasReachedDeadline: Bool = false
+    
+    var totalWorkload: Int = 0
     
     var description:String {
         return "🚁\(id) [\(location.row),\(location.column) W: \(workload)]\n"
@@ -69,14 +72,21 @@ class Drone: CustomStringConvertible, Equatable  {
         
         flyTo(clusterA.warehouse.location)
         loadProduct(product, quantity: quantity)
-        clusterA.removeFromInventory(product, quantity: quantity)
-        clusterA.removeFromSurplus(product, quantity: quantity)
-        simulation.logLoadCommand(self, warehouse: clusterA.warehouse, product: product, quantity: quantity)
-        
         flyTo(clusterB.warehouse.location)
         unloadProduct(product, quantity: quantity)
+        
+        if workload  > simulation.deadline - totalWorkload {
+            return
+        }
+        
+        // perform cluster inventory operations
+        clusterA.removeFromInventory(product, quantity: quantity)
+        clusterA.removeFromSurplus(product, quantity: quantity)
         clusterB.addToInventory(product, quantity: quantity)
         clusterB.removeFromDeficit(product, quantity: quantity)
+        
+        // log commands
+        simulation.logLoadCommand(self, warehouse: clusterA.warehouse, product: product, quantity: quantity)
         simulation.logUnloadCommand(self, warehouse: clusterB.warehouse, product: product, quantity: quantity)
             
         let p = ProductLocation(productId: product.id, warehouseId: clusterB.warehouse.id)
@@ -96,6 +106,10 @@ class Drone: CustomStringConvertible, Equatable  {
             let waitTurns = simulation.productLeadTimes[p]!
             
             wait(waitTurns)
+            
+            if workload > simulation.deadline - totalWorkload {
+                return
+            }
             simulation.logWaitCommand(self, turns: waitTurns)
             
             print("\n\t🚁\(id) will wait \(waitTurns) before trying to deliver 📦\(product.id) from 🌐\(cluster.id)")
@@ -107,14 +121,19 @@ class Drone: CustomStringConvertible, Equatable  {
         }
         
         flyTo(cluster.warehouse.location)
-        
         loadProduct(product, quantity: quantity)
-        cluster.removeFromInventory(product, quantity: quantity)
-        simulation.logLoadCommand(self, warehouse: cluster.warehouse, product: product, quantity: quantity)
-        
         flyTo(order.location)
         unloadProduct(product, quantity: quantity)
+        
+        if workload > simulation.deadline - totalWorkload {
+            return
+        }
+        
+        // perform inventoru operations
+        cluster.removeFromInventory(product, quantity: quantity)
         order.markDelivered(product, quantity: quantity)
+
+        simulation.logLoadCommand(self, warehouse: cluster.warehouse, product: product, quantity: quantity)
         simulation.logDeliverCommand(self, order: order, product: product, quantity: quantity)
         
         print("\n\t🚁\(id) delivering (\(quantity) x 📦\(product.id) (\(product.weight * quantity)kg) from 🌐\(cluster.id) to 🚩\(order.id) (⏱: \(workload))\n")
@@ -124,8 +143,19 @@ class Drone: CustomStringConvertible, Equatable  {
     }
     
     func executeWorkstep() {
+
+       
         if workload > 0 {
+            
             workload -= 1
+            
+            totalWorkload += 1
+            
+            if totalWorkload == simulation.deadline {
+                hasReachedDeadline = true
+                return
+            }
+            
         }
     }
     
