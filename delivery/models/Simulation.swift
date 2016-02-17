@@ -236,7 +236,7 @@ class Simulation {
             
             let idlingDeliveryDrones = deliveryDrones.filter({ $0.isAvailable == true })
             
-            if idlingDeliveryDrones.count > 9 && deliveryDrones.count > 2 {
+            if idlingDeliveryDrones.count > 0 && deliveryDrones.count > 2 {
                 supplyDrones.append(idlingDeliveryDrones[0])
                 deliveryDrones.removeObject(idlingDeliveryDrones[0])
             }
